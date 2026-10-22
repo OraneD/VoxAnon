@@ -1,0 +1,91 @@
+# Configuration for select_speakers.py
+# Usage: python select_test_enroll_speakers.py selection_config.yaml
+
+# --------------------------------------------------------------------------- #
+# Input / output
+# --------------------------------------------------------------------------- #
+metadata: VoxCeleb1_speakers_metadata_verified.csv
+id_column: spk_id            # column holding the speaker identifier
+
+output:
+  enroll: enroll_speakers_balanced_100_verified.csv
+  trial: trial_speakers_balanced_50_verified.csv
+
+# --------------------------------------------------------------------------- #
+# Sizes
+# --------------------------------------------------------------------------- #
+n_enroll: 100
+n_trial: 50
+
+# Trial speakers are always selected among the enroll speakers.
+
+# --------------------------------------------------------------------------- #
+# Filtering (column names are case-insensitive, values are compared lowercased)
+# --------------------------------------------------------------------------- #
+filters:
+  keep:                      # keep only rows whose value is in the list
+    gender: [male, female]
+    accent: [us, england, australia, indian]
+  drop:                      # remove rows whose value is in the list
+    age_range: [child]
+
+# --------------------------------------------------------------------------- #
+# Optimisation
+# --------------------------------------------------------------------------- #
+# Penalty weight per attribute: the objective minimises
+#   sum_attr weight_attr * sum_value |count - target|
+# Higher weight = stricter balance on that attribute.
+# Attributes without a weight default to 1.
+weights:
+  gender: 1000
+  age_range: 100
+  accent: 10
+  pitch_level: 10
+
+solver:
+  time_limit: null           # seconds, null = no limit
+  verbose: false
+
+# --------------------------------------------------------------------------- #
+# Targets (number of speakers per attribute value)
+# Each attribute listed here becomes a balance constraint; omit an attribute
+# to leave it unconstrained. Each block should sum to n_enroll / n_trial.
+# --------------------------------------------------------------------------- #
+targets:
+  enroll:
+    gender:
+      male: 50
+      female: 50
+    age_range:
+      "18-24": 25
+      "25-34": 25
+      "35-59": 25
+      "60+": 25
+    accent:
+      us: 26
+      england: 25
+      australia: 25
+      indian: 24
+    pitch_level:
+      high: 33
+      low: 33
+      mid: 34
+
+  trial:
+    gender:
+      male: 25
+      female: 25
+    age_range:
+      "18-24": 12
+      "25-34": 13
+      "35-59": 13
+      "60+": 12
+    accent:
+      us: 13
+      england: 13
+      australia: 12
+      indian: 12
+    pitch_level:
+      high: 16
+      low: 16
+      mid: 17
