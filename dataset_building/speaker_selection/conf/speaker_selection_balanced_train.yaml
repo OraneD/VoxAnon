@@ -1,0 +1,60 @@
+# Selects one set of n_speakers, balanced on each attribute
+# Usage: python select_train_speakers.py train_config.yaml
+
+metadata: VoxCeleb2_speakers_metadata_verified.csv  
+id_column: spk_id
+output: train_speakers_balanced_1000.csv
+
+n_speakers: 1000
+
+# Relabelling applied before filtering ( already-corrected labels
+# are left as they are).
+relabel:
+  age_group:
+    "18-25": "18-24"
+    "25-35": "25-34"
+    "35-60": "35-59"
+    "60+": "60+"
+
+# Optional extra filters (column names case-insensitive)
+filters:
+  keep: {}
+  drop: {}
+
+# Attributes to balance and the values to spread the speakers over.
+# Targets are computed automatically: n_speakers split evenly across the
+# values (e.g. 1000 / 4 = 250 per age_group, 500/500 for gender).
+# Speakers whose value is not listed here are discarded.
+balance:
+  gender: [male, female]
+  age_group: ["18-24", "25-34", "35-59", "60+"]
+  accent: [us, english, australian, indian]
+  pitch: [high, mid, low]
+
+# Optional: override the automatic targets for an attribute
+# (counts must sum to n_speakers).
+targets:
+  accent:
+    us: 263
+    english: 263
+    australian: 211
+    indian: 263
+  pitch:
+    high: 359
+    mid: 333
+    low: 308
+
+# Penalty weight per attribute (higher = stricter balance)
+weights:
+  gender: 1000
+  age_group: 100
+  accent: 10
+  pitch: 10
+
+solver:
+  time_limit: null           # seconds, null = no limit
+  verbose: false
+
+# Extra stats at the end: number of speakers with <column> == value
+count_values:
+  age_status: [not_verifiable]
