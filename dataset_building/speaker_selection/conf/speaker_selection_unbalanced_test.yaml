@@ -1,17 +1,15 @@
 # Configuration for select_speakers.py (UNBALANCED variant)
-# Usage: python select_test_enroll_speakers.py selection_config_unbalanced.yaml
+# Usage: python select_test_enroll_speakers.py speaker_selection_unbalanced_test.yaml
 #
 # Imbalance design:
 #   gender      : male = half of female
 #   accent      : indian = half of us / england / australia (those 3 balanced)
 #   age_range   : 60+ = half of the 3 other ranges (those 3 balanced)
-#   pitch_level : high = half of low / mid (low / mid balanced)
+#   pitch: high = half of low / mid (low / mid balanced)
 
-# --------------------------------------------------------------------------- #
-# Input / output
-# --------------------------------------------------------------------------- #
-metadata: VoxCeleb1_speakers_metadata_verified.csv
-id_column: spk_id            # column holding the speaker identifier
+
+metadata: VoxCeleb1_speakers_metadata_verified.csv # should be in the script's folder
+id_column: spk_id          
 
 output:
   enroll: enroll_speakers_unbalanced_100_verified.csv
@@ -25,22 +23,14 @@ n_trial: 50
 
 # Trial speakers are always selected among the enroll speakers.
 
-# --------------------------------------------------------------------------- #
-# Filtering (column names are case-insensitive, values are compared lowercased)
-# --------------------------------------------------------------------------- #
 filters:
   keep:                      # keep only rows whose value is in the list
     gender: [male, female]
     accent: [us, england, australia, indian]
     pitch_level: [low, mid, high]
-  drop:                      # remove rows whose value is in the list
+  drop:                      
     age_range: [child]
 
-# --------------------------------------------------------------------------- #
-# Optimisation
-# --------------------------------------------------------------------------- #
-# Penalty weight per attribute: the objective minimises
-#   sum_attr weight_attr * sum_value |count - target|
 weights:
   gender: 1000
   age_range: 100
@@ -51,9 +41,7 @@ solver:
   time_limit: null           # seconds, null = no limit
   verbose: false
 
-# --------------------------------------------------------------------------- #
-# Targets (number of speakers per attribute value)
-# --------------------------------------------------------------------------- #
+
 targets:
   enroll:
     gender:

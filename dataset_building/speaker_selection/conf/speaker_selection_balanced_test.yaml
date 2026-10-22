@@ -1,11 +1,8 @@
-# Configuration for select_speakers.py
-# Usage: python select_test_enroll_speakers.py selection_config.yaml
+# Configuration for select_test_enroll_speakers.py (balanced)
+# Usage: python select_test_enroll_speakers.py speaker_selection_balanced_test.yaml
 
-# --------------------------------------------------------------------------- #
-# Input / output
-# --------------------------------------------------------------------------- #
 metadata: VoxCeleb1_speakers_metadata_verified.csv
-id_column: spk_id            # column holding the speaker identifier
+id_column: spk_id           
 
 output:
   enroll: enroll_speakers_balanced_100_verified.csv
@@ -19,9 +16,7 @@ n_trial: 50
 
 # Trial speakers are always selected among the enroll speakers.
 
-# --------------------------------------------------------------------------- #
-# Filtering (column names are case-insensitive, values are compared lowercased)
-# --------------------------------------------------------------------------- #
+
 filters:
   keep:                      # keep only rows whose value is in the list
     gender: [male, female]

@@ -1,7 +1,7 @@
 # Selects one set of n_speakers, balanced on each attribute
-# Usage: python select_train_speakers.py train_config.yaml
+# Usage: python select_train_speakers.py speaker_selection_balanced_train.yaml
 
-metadata: VoxCeleb2_speakers_metadata_verified.csv  
+metadata: VoxCeleb2_speakers_metadata_verified.csv  # should be in script's folder
 id_column: spk_id
 output: train_speakers_balanced_1000.csv
 
