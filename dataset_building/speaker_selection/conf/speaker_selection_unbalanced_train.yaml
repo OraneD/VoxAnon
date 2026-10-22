@@ -1,0 +1,65 @@
+# Configuration for select_train_speakers.py (UNBALANCED variant)
+# Goal: 1000 speakers whose attribute distributions approximate the full
+# VoxCeleb2 distribution (targets below are those proportions).
+# Usage: python select_train_speakers.py speaker_selection_unbalanced_train.yaml
+
+metadata: VoxCeleb2_speakers_metadata_verified.csv # should be in the script folder
+id_column: spk_id
+output: train_speakers_unbalanced_1000.csv
+
+n_speakers: 1000
+
+relabel:
+  age_group:
+    "18-25": "18-24"
+    "25-35": "25-34"
+    "35-60": "35-59"
+    "60+": "60+"
+
+filters:
+  keep: {}
+  drop: {}
+
+# Values kept for each attribute (speakers with any other value are discarded).
+balance:
+  gender: [male, female]
+  age_group: ["18-24", "25-34", "35-59", "60+"]
+  accent: [us, english, australian, indian]
+  pitch: [low, mid, high,]
+
+# VoxCeleb2 proportions rescaled to 1000, after removing the categories that
+# are not in `balance` (child, under_18, canada, scotland, hongkong,
+# singapore). Each block sums to 1000.
+targets:
+  gender:
+    male: 597
+    female: 403
+  age_group:
+    "18-24": 255
+    "25-34": 231
+    "35-59": 352
+    "60+": 162
+  accent:
+    us: 308
+    english: 381
+    australian: 145
+    indian: 166
+  pitch:
+    low: 406
+    mid: 301
+    high: 293
+
+# Penalty weight per attribute (higher = closer to its targets)
+weights:
+  gender: 1000
+  age_group: 100
+  accent: 10
+  pitch: 10
+
+solver:
+  time_limit: null
+  verbose: false
+
+# Extra stats at the end: number of speakers with <column> == value
+count_values:
+  age_status: [not_verifiable]
